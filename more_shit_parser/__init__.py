@@ -1,0 +1,1 @@
+from .MoreShitParser import shit_parse

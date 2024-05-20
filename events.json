@@ -1,0 +1,70 @@
+{
+  "events": [
+    {
+      "date": "Montag 11 Mrz. 2024, 20:00 Uhr",
+      "name": "Niall Horan",
+      "cost": 61.50,
+      "place": "Mercedes-Benz Arena"
+    },
+    {
+      "date": "Samstag 04 Nov. 17, 20:00 Uhr",
+      "name": "Alligatoah",
+      "cost": 40,
+      "place": "Berlin"
+    },
+    {
+      "date": "Freitag 18 Nov. 2019, 20:00 Uhr",
+      "name": "Ed Sheeran",
+      "cost": 50,
+      "place": "London"
+    },
+    {
+      "date": "Sonntag 01 Jan. 24, 18:00 Uhr",
+      "name": "Coldplay",
+      "cost": 30,
+      "place": "New York"
+    },
+    {
+      "date": "2024-02-14 21:00",
+      "name": "Valentine's Day Concert",
+      "cost": 35,
+      "place": "Paris"
+    },
+    {
+      "date": "11/03/2024",
+      "name": "Jazz Festival",
+      "cost": 25,
+      "place": "Chicago"
+    },
+    {
+      "date": "05-05-2023 16:00",
+      "name": "Spring Parade",
+      "cost": 20,
+      "place": "San Francisco"
+    },
+    {
+      "date": "20.06.2022",
+      "name": "Summer Solstice Celebration",
+      "cost": 15,
+      "place": "Seattle"
+    },
+    {
+      "date": "August 15, 2021, 14:00",
+      "name": "Independence Day Event",
+      "cost": 10,
+      "place": "Washington D.C."
+    },
+    {
+      "date": "10.03.2018",
+      "name": "Landstreicher",
+      "cost": 50,
+      "place": "Dresden"
+    },
+    {
+      "date": "07-23-2023",
+      "name": "Food Truck Rally",
+      "cost": 5,
+      "place": "Austin"
+    }
+  ]
+}
