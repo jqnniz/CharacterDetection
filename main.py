@@ -1,6 +1,7 @@
 import datetime
 import cv2
-import easyocr
+#import easyocr
+from paddleocr import PaddleOCR
 import json
 from less_shit_parser import LessShitParser
 from more_shit_parser import MoreShitParser
@@ -13,12 +14,18 @@ def read_json(json_path, events):
     return data[events]
 
 
-def get_text(image_path):
-    img = cv2.imread(image_path)
-    reader = easyocr.Reader(['de'], gpu=True)
-    results = reader.readtext(img)
-    text = [result[1] for result in results]
-    return text
+def get_text(image_path,useEasyOCR=True,usePaddleOCR=False):
+    # if useEasyOCR:
+    #     img = cv2.imread(image_path)
+    #     reader = easyocr.Reader(['de'], gpu=True)
+    #     results = reader.readtext(img)
+    #     text = [result[1] for result in results]
+    #     return text
+    if usePaddleOCR:
+        ocr = PaddleOCR(lang='de')
+        result = ocr.ocr(image_path)
+        text = [result[1][0] for result in result[0]]
+        return text
 
 
 def get_all_dates(parsed_date=False):
@@ -56,7 +63,9 @@ def get_matching_date(detected_date, event_dates):
 
 
 def main():
-    text = get_text("images/date01.jpeg")
+    #text = get_text("images/date01.jpeg",True,False)
+    text = get_text("images/date01.jpeg",False,True)
+
 
     print(text)
     detected_date_02 = MoreShitParser.shit_parse(text)

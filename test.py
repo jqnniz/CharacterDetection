@@ -16,6 +16,7 @@ inputs = ['Montag , 18.Nov.19, 20-00 Uhr',
             '18.11.19, 20-00 Uhr',
             'NOVEMBER 18 2019',
             'NovEMBER 18 2019',
+            'Montag.18.Nov.19,20:00Uhr'
 ]
 
 

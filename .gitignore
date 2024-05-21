@@ -2,3 +2,6 @@ less_shit_parser/__pycache__/__init__.cpython-310.pyc
 less_shit_parser/__pycache__/LessShitParser.cpython-310.pyc
 more_shit_parser/__pycache__/__init__.cpython-310.pyc
 more_shit_parser/__pycache__/MoreShitParser.cpython-310.pyc
+__pycache__/paddle_ocr_detection.cpython-310.pyc
+__pycache__/paddleocr.cpython-310.pyc
+__pycache__/test_paddle.cpython-310.pyc
