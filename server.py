@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request,redirect,flash,url_for
+from flask import Flask, render_template,request,redirect,flash,url_for
 from flask_socketio import SocketIO, emit
 #!/usr/bin/python
 import sqlite3
 import os,sys
 import requests,time
 import json, datetime
+
+import main_test
 
 UPLOAD_FOLDER = 'uploads'
 app = Flask(__name__)
@@ -35,8 +37,13 @@ def upload_file():
             #filename = secure_filename(file.filename)
             filename = file.filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            date,event_str = main_test.main()
+
+            print(date,event_str)
+            socketio.emit('event_update', {'date_str': date.strftime('%Y-%m-%d'),'event_str': str(event_str)})
+
             #return redirect(url_for('download_file', name=filename))
-            return redirect("/")
+            return redirect("/"+ date.strftime('%Y-%m-%d'))
 
     return
 

@@ -5,6 +5,8 @@ from paddleocr import PaddleOCR
 import json
 from less_shit_parser import LessShitParser
 from more_shit_parser import MoreShitParser
+import glob
+import os
 
 
 # Opening JSON file
@@ -64,7 +66,10 @@ def get_matching_date(detected_date, event_dates):
 
 def main():
     #text = get_text("images/date01.jpeg",True,False)
-    text = get_text("images/date01.jpeg",False,True)
+    list_of_files = glob.glob('uploads/*') # * means all if need specific format then *.csv
+    latest_file = max(list_of_files, key=os.path.getctime)
+    print(latest_file)
+    text = get_text(latest_file,False,True)
 
 
     print(text)

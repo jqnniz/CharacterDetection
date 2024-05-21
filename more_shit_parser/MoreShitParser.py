@@ -80,9 +80,9 @@ def shit_parse(date_str):
                 
 
         if dateFound:
-            formatted_date = parsed_date.strftime('%Y-%m-%d')
+            #formatted_date = parsed_date.strftime('%Y-%m-%d')
 
 
             # Format the parsed date as DD/MM/YYYY
-            return formatted_date
+            return parsed_date
     return None
