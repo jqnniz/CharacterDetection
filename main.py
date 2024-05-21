@@ -17,11 +17,11 @@ def get_text(image_path):
     img = cv2.imread(image_path)
     reader = easyocr.Reader(['de'], gpu=True)
     results = reader.readtext(img)
-    text = " ".join([result[1] for result in results])
+    text = [result[1] for result in results]
     return text
 
 
-def get_all_dates(parsed_date):
+def get_all_dates(parsed_date=False):
     events = read_json('events.json', events='events')
 
     # Extract and parse dates from the JSON events
@@ -32,8 +32,8 @@ def get_all_dates(parsed_date):
         event_place = event.get('place', '')
         event_name = event.get('name', '')
 
-        if parsed_date:
-            event_dates.append([parsed_date, event_cost, event_place, event_name])
+        #if parsed_date:
+        #    event_dates.append([parsed_date, event_cost, event_place, event_name])
     return event_dates
 
 
@@ -56,24 +56,26 @@ def get_matching_date(detected_date, event_dates):
 
 
 def main():
-    text = get_text("images/date02.jpeg")
+    text = get_text("images/date01.jpeg")
 
     print(text)
     detected_date_02 = MoreShitParser.shit_parse(text)
-    detected_date_01 = LessShitParser.shit_parse_nlp(text)
+    detected_date_01 = "" #LessShitParser.shit_parse_nlp(text)
 
-    print(detected_date_01, detected_date_02)
+   # print(detected_date_01, detected_date_02)   
+    print(detected_date_02)
 
-    '''if detected_date:
+
+    if detected_date_01 or detected_date_02:
         all_dates = get_all_dates()
-        matching_date = get_matching_date(detected_date, all_dates)
+        matching_date = get_matching_date(detected_date_02, all_dates)
         if matching_date:
             print(f"Matching date: {matching_date}")
         else:
             print("No matching date found")
     else:
         print("No date detected in the image")
-'''
+
 
 
 if __name__ == '__main__':
