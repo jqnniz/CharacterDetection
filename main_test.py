@@ -65,7 +65,7 @@ def get_matching_date(detected_date, event_dates):
             print(f"Matching event found: {place}")
             print(f"Matching event found: {name}")
             return date, place + " " + name
-    return None
+    return None,None
 
 
 def main():
@@ -91,6 +91,7 @@ def main():
             print(f"Matching date: {matching_date}")
         else:
             print("No matching date found")
+            return detected_date_02,""
     else:
         print("No date detected in the image")
         matching_date = None

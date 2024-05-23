@@ -43,6 +43,12 @@ def preprocess(inputs):
                 output.append(elem.strip())
         else:
             output.append(input)
+        if " " in input:
+            i = input.split(" ")
+            for elem in i:
+                output.append(elem.strip())
+        else:
+            output.append(input)
 
     return output
 
@@ -53,7 +59,7 @@ def shit_parse(date_str):
         dateFound = False
 
         result = re.compile(pattern)
-        r = result.match(input)
+        r = result.match(input[0:10])
         if r:
 
             try:
@@ -62,21 +68,30 @@ def shit_parse(date_str):
             except ValueError:
                 dateFound = False
         else:
+            r = result.match(input[0:8])
+            if r:
 
-            for abbr,abbr_num in months:
-                if abbr in input or abbr.upper() in input:
-                    print("detected month")
-                    print(abbr)
+                try:
+                    parsed_date = parser.parse(r.group(0), dayfirst=True, fuzzy=True)
+                    dateFound = True
+                except ValueError:
+                    dateFound = False
 
-                    input.replace(abbr,abbr_num)
+            else:
+                for abbr,abbr_num in months:
+                    if abbr in input or abbr.upper() in input:
+                        print("detected month")
+                        print(abbr)
 
-                    print(input)
+                        input.replace(abbr,abbr_num)
 
-                    try:
-                        parsed_date = parser.parse(input, dayfirst=True, fuzzy=True)
-                        dateFound = True
-                    except ValueError:
-                        dateFound = False
+                        print(input)
+
+                        try:
+                            parsed_date = parser.parse(input, dayfirst=True, fuzzy=True)
+                            dateFound = True
+                        except ValueError:
+                            dateFound = False
                 
 
         if dateFound:
