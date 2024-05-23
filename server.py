@@ -8,6 +8,8 @@ import json, datetime
 import binascii
 import main_test
 
+selectedDate = ""
+
 UPLOAD_FOLDER = 'uploads'
 ROOT_DIR = 'events'
 app = Flask(__name__)
@@ -32,6 +34,7 @@ def index():
 
 @app.route('/', methods=['POST'])
 def upload_file():
+    global selectedDate
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -48,20 +51,30 @@ def upload_file():
             filename = file.filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             date,event_str = main_test.main()
+            if date:
+                selectedDate = date.strftime('%Y-%m-%d')
+            else:
+                selectedDate = ""
             print(date,event_str)
-            return render_template('index.html', date=date.strftime('%Y-%m-%d'), event=event_str)
+            return render_template('index.html', date=selectedDate, event=event_str)
 
     return
 
 @app.route('/gallery')
 def home():
+    global selectedDate
     root_dir = app.config['ROOT_DIR']
     image_paths = []
-    for root,dirs,files in os.walk(root_dir):
-        for file in files:
-            if any(file.endswith(ext) for ext in app.config['IMAGE_EXTS']):
-                image_paths.append(encode(os.path.join(root,file)))
-    return render_template('gallery.html', paths=image_paths)
+    if selectedDate == "":
+        return redirect("/")
+    else:
+        event_path = os.path.join(root_dir,selectedDate)
+
+        for root,dirs,files in os.walk(event_path):
+            for file in files:
+                if any(file.endswith(ext) for ext in app.config['IMAGE_EXTS']):
+                    image_paths.append(encode(os.path.join(root,file)))
+        return render_template('gallery.html', paths=image_paths, date=selectedDate)
 
 
 @app.route('/cdn/<path:filepath>')

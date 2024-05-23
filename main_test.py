@@ -93,6 +93,8 @@ def main():
             print("No matching date found")
     else:
         print("No date detected in the image")
+        matching_date = None
+        event = None
 
     return matching_date,event
 
