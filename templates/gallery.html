@@ -16,5 +16,9 @@
     <img src='cdn/{{ path }}' height=200 width=200 onclick="clicked_img(this)" >
     {% endfor %}
   </div>
+  <form method=post enctype=multipart/form-data>
+    <input type="file" name="file" accept="image/*" capture="environment">
+    <input type=submit value=Upload>
+  </form>
 </body>
 </html>
