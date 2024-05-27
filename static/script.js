@@ -1,6 +1,7 @@
 var socket = io();
 console.log("INIT");
-console.log(document.getElementById("date1234"));
+socket.emit('init_connection', {data: 'connected!'});
+console.log("INIT Connnection sent.");
 
 socket.on('event_update', function(msg) {
     //console.log(msg);
@@ -12,33 +13,81 @@ socket.on('event_update', function(msg) {
   });
 
 
-  function clicked_img(img,fp){
-    console.log(img.src);
+  socket.on('init_date_selection', function(msg) {
+    //$('#textBox').append('<p>Received: ' + msg.data + '</p>'
+    var options = "";
+    options += "<option selected>Datum auswählen</option>";
+    console.log(msg.data)
+    var result = msg.data.replaceAll("(","");
+    result = result.replaceAll(")","");
+    result = result.replaceAll("]","");
+    result = result.replaceAll("[","");
+    result = result.replaceAll(",, ",",");
+    result = result.replaceAll("'","");
+    result = result.replaceAll(" ","");
+    const myArray = result.split(",");
+    console.log(myArray)
 
-    var top=document.getElementById('top')
+    for(var i = 0; i < myArray.length; i++){
+      console.log(myArray[i]);
+      if(myArray[i].length > 0){
+        options += "<option value="+ myArray[i]+">"+ myArray[i] +"</option>";
 
-    top.src = img.src;
-
-    top.hidden=false;
-
-
-    if (img.naturalWidth<screen.width*0.6 && img.naturalHeight<screen.height*0.6) {
-
-      top.width=img.naturalWidth;
-      top.height=img.naturalHeight;
-
-    } else {
-
-      top.width=screen.width*0.6;
-      top.height=img.naturalHeight/img.naturalWidth*top.width;
-
+      }
     }
+    document.getElementById('selectDate').innerHTML = options;
+  });
 
-    document.getElementById('close').hidden = false;
+// Funktion zum Öffnen des Bildes in der Überlagerung
+function clicked_img(element) {
+  var overlay = document.querySelector('.overlay');
+  var topImage = document.getElementById('top');
+  var closeButton = document.getElementById('close');
+
+  topImage.src = element.src;
+  overlay.style.display = 'flex';
+  topImage.hidden = false;
+  closeButton.hidden = false;
 }
 
+// Funktion zum Schließen der Überlagerung
+function do_close() {
+  var overlay = document.querySelector('.overlay');
+  var topImage = document.getElementById('top');
+  var closeButton = document.getElementById('close');
 
-function do_close(){
-document.getElementById('top').hidden=true;
-document.getElementById('close').hidden=true;
+  overlay.style.display = 'none';
+  topImage.hidden = true;
+  closeButton.hidden = true;
+}
+
+// Event-Listener für das Schließen der Überlagerung, wenn außerhalb des Bildes geklickt wird
+document.querySelector('.overlay').addEventListener('click', function(event) {
+  if (event.target === this) {
+      do_close();
+  }
+});
+
+// Event-Listener für die automatische Übermittlung des Formulars nach Auswahl einer Datei
+document.getElementById('fileInput').addEventListener('change', function() {
+  document.getElementById('uploadForm').submit();
+});
+
+// Event-Listener für die automatische Übermittlung des Formulars nach Auswahl einer Datei
+document.getElementById('fileInput2').addEventListener('change', function() {
+  document.getElementById('uploadForm2').submit();
+});
+
+
+function submitDate(){
+  document.getElementById('uploadForm').submit();
+}
+function submitFileUpload(){
+  document.getElementById('uploadForm2').submit();
+}
+
+function selectDate(){
+  document.getElementById('date').value = document.getElementById('selectDate').value;
+
+  socket.emit('select_date', {date: document.getElementById('date').value});
 }

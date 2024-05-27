@@ -10,12 +10,19 @@
 </head>
 <body>
     <div>
-        <h1>Hallo Welt!</h1>
-        <form method=post enctype=multipart/form-data>
-            <input type="file" name="file" accept="image/*" capture="environment">
-            <input type=submit value=Upload>
+        <h1>Konzerterinnerungen</h1>
+        <select id="selectDate" onchange="selectDate()"></select><br>
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+            <label for="fileInput" class="camera-icon">
+                <i class="fa fa-camera"></i>
+            </label>
+            <input type="file" name="file" accept="image/*" capture="environment" id="fileInput" onchange="submitDate()">
+             <!--<input type="submit" value="Upload" id="submitButton">-->
           </form>
 <div>
+
+    <input type="text" readonly value="{{date}}" id="date">
+
     Datum: {{date}}<br>
     Event: {{event}}<br>
 

@@ -1,40 +1,174 @@
-.inputbutton{
-    width: 100%;
-    height: 100px;
-    background: #ecedef;  
-    border: none;  
-    font-size: 30px;  
-    border-radius: 1px;  
-    font-weight: 700;  
-    color: #235558;  
-    cursor: pointer;    
+/* Allgemeine Stile */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+a {
+  display: block;
+  margin: 20px;
+  text-decoration: none;
+  color: #4CAF50;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #388E3C;
+}
+
+h1 {
+  color: #444;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Overlay-Stile */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.overlay img {
+  max-width: 90%;
+  max-height: 80%;
+  border: 5px solid #fff;
+  border-radius: 10px;
+}
+
+#close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Galerie-Stile */
+.cx {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 1000px;
+}
+
+.cx img {
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.cx img:hover {
+  transform: scale(1.05);
+}
+
+/* Formulare */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  width: 90%;
+  max-width: 500px;
+}
+
+input[type="file"] {
+  /*margin-bottom: 10px;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  background-color: #fafafa;
+  transition: border-color 0.3s;*/
+  display: none;
+}
+.camera-icon {
+  font-size: 40px;
+  color: #4CAF50;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.camera-icon:hover {
+  color: #388E3C;
+}
+
+
+input[type="file"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: none;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: none;
+  font-size: 32px;
+  text-align: center;
+  cursor: default;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .cx img {
+      height: 150px;
+      width: 150px;
   }
 
-  body {
-    font-family: Verdana, sans-serif;
-    margin: 0;
+  h1 {
+      font-size: 20px;
   }
-  
-  * {
-    box-sizing: border-box;
+
+  select, input[type="file"], input[type="submit"], input[type="text"] {
+      font-size: 14px;
   }
-  
-  .overlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
-  
+
+  a {
+      font-size: 14px;
   }
-  
-  #top {
-    border: 5px solid #ccc;
-  }
-  
-  #close {
-    position: fixed;
-    top: 102%;
-    left:50%;
-    transform: translate(-102%, -50%);
-  }
+}

@@ -116,5 +116,23 @@ def download_file(filepath):
     dir,filename = os.path.split(decode(filepath))
     return send_from_directory(dir, filename, as_attachment=False)
 
+@socketio.on('init_connection')
+def init_connection(message):
+    initDateSelection()
+
+@socketio.on('select_date')
+def select_date(message):
+    global selectedDate
+    selectedDate = message["date"]
+
+def initDateSelection():
+
+    allDates = []
+    event_path = app.config['ROOT_DIR']
+    for root,dirs,files in os.walk(event_path):
+        allDates.append(dirs)
+
+    emit('init_date_selection',{'data': str(allDates)}, broadcast=True)
+
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",allow_unsafe_werkzeug=True)

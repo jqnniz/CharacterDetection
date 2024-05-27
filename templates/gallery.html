@@ -2,23 +2,28 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="static/style.css">
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="static/script.js"></script>
 </head>
 <body>
 <a href="/">Zurück</a>
-<h1>Event vom: {{date}}</h1>
-  <div class="overlay"><img src="blah" id="top" hidden=True>
-    <span id="close" hidden=True onclick=do_close()><b><u>CLOSE(X)</u></b></span>
-  </div>
-  <div class="cx" style="background-color:#fff;">
-    {% for path in paths %}
-    <img src='cdn/{{ path }}' height=200 width=200 onclick="clicked_img(this)" >
-    {% endfor %}
-  </div>
-  <form method=post enctype=multipart/form-data>
-    <input type="file" name="file" accept="image/*" capture="environment">
-    <input type=submit value=Upload>
-  </form>
+<h1>Event vom: {{ date }}</h1>
+<div class="overlay">
+  <img src="blah" id="top" hidden="true" alt="Large view">
+  <span id="close" hidden="true" onclick="do_close()"><b><u>CLOSE(X)</u></b></span>
+</div>
+<div class="cx" style="background-color:#fff;">
+  {% for path in paths %}
+  <img src='cdn/{{ path }}' height="200" width="200" onclick="clicked_img(this)" alt="Event Image">
+  {% endfor %}
+</div>
+<form method="post" enctype="multipart/form-data" id="uploadForm2">
+  <label for="fileInput2" class="camera-icon">
+    <i class="fa fa-camera"></i>
+</label>
+  <input type="file" name="file" accept="image/*" id="fileInput2" onchange="submitFileUpload()">
+  <!--<input type="submit" value="Upload" id="submitButton2">-->
+</form>
 </body>
 </html>
