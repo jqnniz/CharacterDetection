@@ -15,8 +15,12 @@ from dateutil import parser
 def read_json(json_path, events):
     with open(json_path) as f:
         data = json.load(f)
-    return data[events]
+    return data
 
+
+def write_json(json_path, events):
+    with open(json_path, mode='w') as f:
+        json.dump(events, f)
 
 def get_text(image_path,useEasyOCR=True,usePaddleOCR=False):
     # if useEasyOCR:

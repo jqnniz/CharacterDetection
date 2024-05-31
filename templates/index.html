@@ -9,9 +9,10 @@
     <title>Konzerterkennung</title>
 </head>
 <body>
-    <div>
         <h1>Konzerterinnerungen</h1>
+        <h2>Datum aus vorhandener Liste wählen:</h2>
         <select id="selectDate" onchange="selectDate()"></select><br>
+        <h2>Datum von Ticket scannen:</h2>
         <form method="post" enctype="multipart/form-data" id="uploadForm">
             <label for="fileInput" class="camera-icon">
                 <i class="fa fa-camera"></i>
@@ -19,17 +20,13 @@
             <input type="file" name="file" accept="image/*" capture="environment" id="fileInput" onchange="submitDate()">
              <!--<input type="submit" value="Upload" id="submitButton">-->
           </form>
-<div>
+
 
     <input type="text" readonly value="{{date}}" id="date">
 
     Datum: {{date}}<br>
-    Event: {{event}}<br>
 
-</div>
-<div>
-    <a href="/gallery">Erinnerungen ansehen</a>
-</div>
-    </div>
+<a href="/gallery">Erinnerungen ansehen</a>
+<a href="/newevent">Neues Event anlegen</a>
 </body>
 </html>

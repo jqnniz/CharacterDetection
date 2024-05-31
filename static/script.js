@@ -36,6 +36,8 @@ socket.on('event_update', function(msg) {
       }
     }
     document.getElementById('selectDate').innerHTML = options;
+    document.getElementById('gallery').style.display = 'None';
+
   });
 
 // Funktion zum Öffnen des Bildes in der Überlagerung
@@ -85,9 +87,25 @@ function submitDate(){
 function submitFileUpload(){
   document.getElementById('uploadForm2').submit();
 }
+function submitEvent(){
+
+  if(document.getElementById('date').value == ""){
+    console.log("datum fehlt")
+  }else{
+    document.getElementById('newevent').submit();
+
+  }
+
+}
 
 function selectDate(){
   document.getElementById('date').value = document.getElementById('selectDate').value;
 
   socket.emit('select_date', {date: document.getElementById('date').value});
+  //setTimeout(window.location.replace("/gallery"),2000);
+  //window.location.replace("/gallery");
+
+  //document.getElementById('gallery').style.visibility = true;
+  document.getElementById('gallery').style.display = 'Block';
 }
+

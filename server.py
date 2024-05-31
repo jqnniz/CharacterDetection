@@ -56,7 +56,8 @@ def upload_file():
             else:
                 selectedDate = ""
             print(date,event_str)
-            return render_template('index.html', date=selectedDate, event=event_str)
+            #return render_template('index.html', date=selectedDate, event=event_str)
+            return redirect('/gallery')
 
     return
 @app.route('/gallery', methods=['POST'])
@@ -87,6 +88,12 @@ def upload_file_toGallery():
 
     return
 
+@app.route('/newevent', methods=['POST'])
+def create_new_event():
+    print(dir(request))
+    print(request.args.get("event-date"))
+
+    return
 def getPathsFromDir(dir):
     image_paths = []
     for root,dirs,files in os.walk(dir):
@@ -96,6 +103,35 @@ def getPathsFromDir(dir):
 
     return image_paths
 
+@app.route('/newevent')
+def newevent():
+    global selectedDate
+    if request.args:
+        selectedDate = request.args.get("event-date")
+
+        newevent = {'date': request.args.get("event-date"),
+                     'price': request.args.get("event-price"),
+                     'location': request.args.get("event-location"),
+                     'stadium': request.args.get("event-stadium"),
+                     'artist': request.args.get("event-artist"),
+                     'tourname': request.args.get("event-tourname")
+        }
+        events = main_test.read_json('events.json', events='events')
+
+        events.append(newevent)
+
+        main_test.write_json('events.json', events=events)
+
+        event_path = os.path.join(app.config['ROOT_DIR'],selectedDate)
+
+        if not os.path.exists(event_path):
+            os.mkdir(event_path) 
+
+        image_paths=getPathsFromDir(event_path)
+        return redirect(url_for('.home', paths=image_paths, date=selectedDate))
+
+
+    return render_template('newevent.html')
 
 @app.route('/gallery')
 def home():
@@ -108,7 +144,20 @@ def home():
         event_path = os.path.join(root_dir,selectedDate)
         image_paths=getPathsFromDir(event_path)
 
-        return render_template('gallery.html', paths=image_paths, date=selectedDate)
+
+        event = getEventFromJSONWhereDate(selectedDate)
+        if event == None:
+            return redirect("/")
+        else:
+            #try:
+            d0 = datetime.datetime.strptime(selectedDate,"%Y-%m-%d")
+            d1 = datetime.datetime.now()
+            delta = (d1 - d0).days
+            #except:
+            #    delta = ""
+            #    pass
+
+            return render_template('gallery.html', paths=image_paths, date=event[0],price=event[1],ort=event[2],stadium=event[3],artist=event[4],tour=event[5],days_offset=delta)
 
 
 @app.route('/cdn/<path:filepath>')
@@ -133,6 +182,23 @@ def initDateSelection():
         allDates.append(dirs)
 
     emit('init_date_selection',{'data': str(allDates)}, broadcast=True)
+
+
+def getEventFromJSONWhereDate(date):
+    events = main_test.read_json('events.json', events='events')
+
+    for event in events:
+        event_date_str = event.get('date', '')
+        if event_date_str == date:
+            event_cost = event.get('price', '')
+            event_place = event.get('location', '')
+            event_stadium = event.get('stadium', '')
+            artist = event.get('artist', '')
+            tour = event.get('tourname', '')
+
+            return [event_date_str,event_cost,event_place,event_stadium,artist,tour]
+    return None
+
 
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",allow_unsafe_werkzeug=True)

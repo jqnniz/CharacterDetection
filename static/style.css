@@ -19,6 +19,7 @@ a {
   color: #4CAF50;
   font-size: 16px;
   transition: color 0.3s;
+  width: 100%;
 }
 
 a:hover {
@@ -28,7 +29,7 @@ a:hover {
 h1 {
   color: #444;
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 48px;
   font-weight: 600;
 }
 
@@ -110,7 +111,7 @@ input[type="file"] {
   display: none;
 }
 .camera-icon {
-  font-size: 40px;
+  font-size: 120px;
   color: #4CAF50;
   cursor: pointer;
   transition: color 0.3s;
@@ -135,12 +136,36 @@ input[type="submit"] {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+  transition: font-size 0.3s;
+  margin-top: 15px;
 }
 
 input[type="submit"]:hover {
   background-color: #45a049;
+  font-size: 18px;
 }
-
+input[type="number"] {
+  width: 100%;
+  padding: none;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: none;
+  font-size: 32px;
+  text-align: center;
+  cursor: default;
+}
+input[type="date"] {
+  width: 100%;
+  padding: none;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: none;
+  font-size: 32px;
+  text-align: center;
+  cursor: default;
+}
 input[type="text"] {
   width: 100%;
   padding: none;
@@ -151,6 +176,10 @@ input[type="text"] {
   font-size: 32px;
   text-align: center;
   cursor: default;
+}
+label{
+  text-align: left;
+  margin-top: 15px;
 }
 
 /* Responsive Design */
@@ -164,11 +193,14 @@ input[type="text"] {
       font-size: 20px;
   }
 
-  select, input[type="file"], input[type="submit"], input[type="text"] {
-      font-size: 14px;
+  select, input[type="file"], input[type="submit"], input[type="text"],input[type="date"],input[type="number"] {
+      font-size: 24px;
+      width: 80%;
   }
 
   a {
-      font-size: 14px;
+      font-size: 24px;
+      width: 100%;
+  
   }
 }

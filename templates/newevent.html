@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="static/script.js"></script>
+</head>
+<body>
+<a href="/">Zurück</a>
+
+<form id="newevent">
+<label for="date">Datum</label>
+<input type="date" id="date" name="event-date" min="2010-01-01" max="2999-12-31" />
+<label for="price">Preis</label>
+<input type="number" id="price" name="event-price"/>
+<label for="location">Stadt/Ort</label>
+<input type="text" id="location" name="event-location"/>
+<label for="stadium">Stadium/Arena/Halle/Veranstaltungsgelände</label>
+<input type="text" id="stadium" name="event-stadium"/>
+<label for="artist">Künstler</label>
+<input type="text" id="artist" name="event-artist"/>
+<label for="tourname">Tourname</label>
+<input type="text" id="tourname" name="event-tourname"/>
+<input type="button" value="Event anlegen" onclick="submitEvent()"/>
+
+</form>
+</body>
+</html>
