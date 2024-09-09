@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/static/script.js"> </script>
+    <title>Konzerterkennung</title>
+</head>
+<body>
+        <h1>Konzerterinnerungen</h1>
+            <div class="container">
+            <div class="item">
+                <div class="eventimg">
+                </div>
+                <div class="eventdescription">
+                    <div class="eventname">
+                        Colors of Beat
+                    </div>
+                    <div class="eventdate">
+                        06.09.2024
+                    </div>
+                    <div class="eventplace">
+                        Waldbad Mehderitzsch
+                    </div>
+                </div>
+            </div>
+            <div class="item">2</div>
+            {% for event in events %}
+                <div class="item">
+                    <div class="eventimg">
+                        <img src="{{ event.imgsrc }}">
+                    </div>
+                    <div class="eventdescription">
+                        <div class="eventname">
+                            {{ event.name }}
+                        </div>
+                        <div class="eventdate">
+                            {{ event.date }}
+                        </div>
+                        <div class="eventplace">
+                            {{ event.place }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        <h2>Datum aus vorhandener Liste wählen:</h2>
+        <select id="selectDate" onchange="selectDate()"></select><br>
+        <h2>Datum von Ticket scannen:</h2>
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+            <label for="fileInput" class="camera-icon">
+                <i class="fa fa-camera"></i>
+            </label>
+            <input type="file" name="file" accept="image/*" capture="environment" id="fileInput" onchange="submitDate()">
+             <!--<input type="submit" value="Upload" id="submitButton">-->
+          </form>
+
+
+    <input type="text" readonly value="{{date}}" id="date">
+
+    Datum: {{date}}<br>
+
+<a href="/gallery">Erinnerungen ansehen</a>
+<a href="/newevent">Neues Event anlegen</a>
+</body>
+</html>

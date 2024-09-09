@@ -7,6 +7,7 @@ import requests,time
 import json, datetime
 import binascii
 import main_test
+from operator import itemgetter
 
 selectedDate = ""
 
@@ -30,7 +31,9 @@ def decode(x):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    events = getAllEventsFromJSON()
+    events = sortEventsDateDescending(events)
+    return render_template('index.html', events=events)
 
 @app.route('/', methods=['POST'])
 def upload_file():
@@ -173,6 +176,7 @@ def init_connection(message):
 def select_date(message):
     global selectedDate
     selectedDate = message["date"]
+    print(selectedDate)
 
 def initDateSelection():
 
@@ -199,6 +203,14 @@ def getEventFromJSONWhereDate(date):
             return [event_date_str,event_cost,event_place,event_stadium,artist,tour]
     return None
 
+
+def sortEventsDateDescending(events):
+    return sorted(events, key=lambda x: datetime.datetime.strptime(x['date'], '%Y-%m-%d'), reverse=True)
+
+def getAllEventsFromJSON():
+    events = main_test.read_json('events.json', events='events')
+    dir(events)
+    return events
 
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",allow_unsafe_werkzeug=True)
