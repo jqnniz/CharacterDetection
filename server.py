@@ -7,7 +7,6 @@ import requests,time
 import json, datetime
 import binascii
 import main_test
-from operator import itemgetter
 
 selectedDate = ""
 
@@ -34,6 +33,8 @@ def index():
     events = getAllEventsFromJSON()
     events = sortEventsDateDescending(events)
     events = addTitleImagePathToEvents(events)
+    maxCharacterCountEventTitle = 18
+    events = shortAllEventNamesToGivenLength(events,maxCharacterCountEventTitle)
     return render_template('index.html', events=events)
 
 @app.route('/', methods=['POST'])
@@ -142,7 +143,9 @@ def home():
     global selectedDate
     root_dir = app.config['ROOT_DIR']
 
-    if selectedDate == "":
+    selectedDate = request.args.get('eventdate')
+
+    if selectedDate == "" or selectedDate == None:
         return redirect("/")
     else:
         event_path = os.path.join(root_dir,selectedDate)
@@ -224,6 +227,21 @@ def addTitleImagePathToEvents(events):
 def getAllEventsFromJSON():
     events = main_test.read_json('events.json', events='events')
     dir(events)
+    return events
+
+def shortStringToLengthAddPoints(string,length):
+    newstring = string[0:length] + "..."
+    return newstring
+
+def isStringLongerThanGivenLength(string,length):
+    longer = len(string)>length
+    return longer
+
+def shortAllEventNamesToGivenLength(events,maxlength):
+    for event in events:
+        name = event['name']
+        if isStringLongerThanGivenLength(name,maxlength):
+            event['name'] = shortStringToLengthAddPoints(name,maxlength)
     return events
 
 if __name__ == '__main__':
