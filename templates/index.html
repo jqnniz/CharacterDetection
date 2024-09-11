@@ -18,19 +18,31 @@
                         </div>
                         <div class="eventdescription" onclick="selectThisDate('{{event.date}}')">
                             <div class="eventname"  >
-                                {{ event.name }}
+                                {{ event.artist }}
                             </div>
                             <div class="eventdate">
                                 {{ event.date }}
                             </div>
                             <div class="eventplace">
-                                {{ event.place }}
+                                {{ event.location }}
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+                <div class="item" onclick="redirectToAdEvent()">
+                    <div class="eventimgcontainer">
+                    </div>
+                    <div class="eventdescription" onclick="redirectToAdEvent()">
+                        <div class="eventname"  >
+                            Neues Event anlegen
+                        </div>
+                        <div class="eventdate">
+                        </div>
+                        <div class="eventplace">
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <a href="/gallery">Erinnerungen ansehen</a>
-<a href="/newevent">Neues Event anlegen</a>
 </body>
 </html>

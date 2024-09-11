@@ -1,9 +1,9 @@
-[{"date": "2019-12-19", "name": "Niall Horan", "cost": 61.5, "place": "Mercedes-Benz Arena"},
- {"date": "2019-12-18", "name": "Alligatoah", "cost": 40, "place": "Berlin"},
- {"date": "2019-11-18", "name": "LIEDFETT", "cost": 40, "place": "LEIPZIG"},
- {"date": "2019-11-14", "name": "Ed Sheeran", "cost": 50, "place": "London"},
- {"date": "2019-11-12", "name": "Coldplay", "cost": 30, "place": "New York"},
- {"date": "2019-11-17", "name": "Valentine's Day Concert", "cost": 35, "place": "Paris"},
- {"date": "2019-11-22", "name": "Jazz Festival", "cost": 25, "place": "Chicago"},
- {"date": "2019-11-25", "name": "Spring Parade", "cost": 20, "place": "San Francisco"},
- {"date": "2019-11-28", "name": "Summer Solstice Celebration", "cost": 15, "place": "Seattle"}]
+[{"date": "2019-12-19", "artist": "Niall Horan", "cost": 61.5, "place": "Mercedes-Benz Arena"},
+ {"date": "2019-12-18", "artist": "Alligatoah", "cost": 40, "place": "Berlin"},
+ {"date": "2019-11-18", "artist": "LIEDFETT", "price": 40, "location": "LEIPZIG", "stadium": "Werk 2","tourname": "Liedfett Tour"},
+ {"date": "2019-11-14", "artist": "Ed Sheeran", "cost": 50, "place": "London"},
+ {"date": "2019-11-12", "artist": "Coldplay", "cost": 30, "place": "New York"},
+ {"date": "2019-11-17", "artist": "Valentine's Day Concert", "cost": 35, "place": "Paris"},
+ {"date": "2019-11-22", "artist": "Jazz Festival", "cost": 25, "place": "Chicago"},
+ {"date": "2019-11-25", "artist": "Spring Parade", "cost": 20, "place": "San Francisco"},
+ {"date": "2019-11-28", "artist": "Summer Solstice Celebration", "cost": 15, "place": "Seattle"}]

@@ -196,7 +196,7 @@ def getEventFromJSONWhereDate(date):
     events = main_test.read_json('events.json', events='events')
 
     for event in events:
-        event_date_str = event.get('date', '')
+        event_date_str = event.get('date','')
         if event_date_str == date:
             event_cost = event.get('price', '')
             event_place = event.get('location', '')
@@ -239,9 +239,9 @@ def isStringLongerThanGivenLength(string,length):
 
 def shortAllEventNamesToGivenLength(events,maxlength):
     for event in events:
-        name = event['name']
+        name = event['artist']
         if isStringLongerThanGivenLength(name,maxlength):
-            event['name'] = shortStringToLengthAddPoints(name,maxlength)
+            event['artist'] = shortStringToLengthAddPoints(name,maxlength)
     return events
 
 if __name__ == '__main__':
