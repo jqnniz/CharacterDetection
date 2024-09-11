@@ -13,10 +13,10 @@
                 <div class="container">
                 {% for event in events %}
                     <div class="item" onclick="selectThisDate('{{event.date}}')">
-                        <div class="eventimg">
-                            <img src="{{ event.imgsrc }}">
+                        <div class="eventimgcontainer">
+                            <img class="eventimg" src='cdn/{{ event.imgsrc }}' onclick="selectThisDate('{{event.date}}')">
                         </div>
-                        <div class="eventdescription">
+                        <div class="eventdescription" onclick="selectThisDate('{{event.date}}')">
                             <div class="eventname"  >
                                 {{ event.name }}
                             </div>

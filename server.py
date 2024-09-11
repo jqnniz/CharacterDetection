@@ -33,6 +33,7 @@ def decode(x):
 def index():
     events = getAllEventsFromJSON()
     events = sortEventsDateDescending(events)
+    events = addTitleImagePathToEvents(events)
     return render_template('index.html', events=events)
 
 @app.route('/', methods=['POST'])
@@ -206,6 +207,19 @@ def getEventFromJSONWhereDate(date):
 
 def sortEventsDateDescending(events):
     return sorted(events, key=lambda x: datetime.datetime.strptime(x['date'], '%Y-%m-%d'), reverse=True)
+
+def selectSinglePathFromDir(date):
+    event_path = os.path.join(app.config['ROOT_DIR'],date)
+    paths = getPathsFromDir(event_path)
+    if len(paths) == 0:
+        return ""
+    else:
+        return paths[0]
+
+def addTitleImagePathToEvents(events):
+    for event in events:
+        event['imgsrc'] = selectSinglePathFromDir(event['date'])
+    return events
 
 def getAllEventsFromJSON():
     events = main_test.read_json('events.json', events='events')
