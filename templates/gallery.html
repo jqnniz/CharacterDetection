@@ -17,11 +17,15 @@ Entfernung: {{Entfernung}} km
   <img src="blah" id="top" hidden="true" alt="Large view">
   <span id="close" hidden="true" onclick="do_close()"><b><u>CLOSE(X)</u></b></span>
 </div>
-<div class="cx" style="background-color:#fff;">
-  {% for path in paths %}
-  <img src='cdn/{{ path }}' height="200" width="200" onclick="clicked_img(this)" alt="Event Image">
-  {% endfor %}
-</div>
+<section class="gallery">
+  <ul class="images">
+    {% for path in paths %}
+    <li class="card">
+      <img src='cdn/{{ path }}' onclick="clicked_img(this)" alt="Event Image">
+    </li>
+    {% endfor %}
+  </ul>
+</section>
 <form method="post" enctype="multipart/form-data" id="uploadForm2">
   <label for="fileInput2" class="camera-icon">
     <i class="fa fa-camera"></i>

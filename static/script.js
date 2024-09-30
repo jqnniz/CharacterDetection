@@ -11,3 +11,6 @@ function selectThisDate(date){
 function redirectToAdEvent(){
   window.location.href = window.location.href + "newevent";
 }
+function submitFileUpload(){
+  document.getElementById('uploadForm2').submit();
+}

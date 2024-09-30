@@ -112,31 +112,30 @@ h1 {
   font-size: 24px;
   cursor: pointer;
 }
-
-/* Galerie-Stile */
-.cx {
+.gallery{
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  width: 90%;
-  max-width: 1000px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
-.cx img {
-  margin: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  transition: transform 0.2s;
-  cursor: pointer;
-}
 
-.cx img:hover {
-  transform: scale(1.05);
+.gallery .images{
+  gap: 15px;
+  columns: 5 340px;
+  max-width: 95%;
+}
+.images img{
+  width: 100%;
+}
+.images .card{
+  list-style: none;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  transition: transform 0.4s;
+}
+.images .card:hover{
+    transform: scale(1.02);
 }
 
 /* Formulare */
