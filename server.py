@@ -211,12 +211,42 @@ def getEventFromJSONWhereDate(date):
 def sortEventsDateDescending(events):
     return sorted(events, key=lambda x: datetime.datetime.strptime(x['date'], '%Y-%m-%d'), reverse=True)
 
+
+def readTitleImagePathFromSingleTXTFile(eventpath):
+    titleImagePath = ""
+    filepath = os.path.join(eventpath,"title_image.txt")
+
+    if not os.path.isfile(filepath):
+        return ""
+    f = open(filepath, "r") 
+    titleImagePath = f.readlines()[0].replace("\n","")
+    print("readTitleImage path:",titleImagePath)
+    f.close()
+    print("readTitleImage path:",titleImagePath)
+    return titleImagePath
+
+def writeTitleImagePathToSingleTXTFile(eventpath,imagepath):
+    filepath = os.path.join(eventpath,"title_image.txt")
+    
+
+    f = open(filepath, "w") 
+    f.write(imagepath)
+    f.write('\n')
+    f.close()
+
+
 def selectSinglePathFromDir(date):
     event_path = os.path.join(app.config['ROOT_DIR'],date)
+    path = readTitleImagePathFromSingleTXTFile(event_path)
+    if path != "":
+        path = encode(os.path.join(event_path,path))
+        return path
+    
     paths = getPathsFromDir(event_path)
     if len(paths) == 0:
         return ""
     else:
+        print(paths[0])
         return paths[0]
 
 def addTitleImagePathToEvents(events):
