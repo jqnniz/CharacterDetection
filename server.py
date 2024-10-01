@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['ROOT_DIR'] = ROOT_DIR
-app.config['IMAGE_EXTS'] = [".png", ".jpg", ".jpeg", ".gif", ".tiff"]
+app.config['IMAGE_EXTS'] = [".png", ".jpg", ".jpeg", ".gif", ".tiff",".mp4",".JPG"]
 socketio = SocketIO(app)
 
 def encode(x):
@@ -46,23 +46,26 @@ def upload_file():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        files = request.files.getlist("file") 
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file: #and allowed_file(file.filename):
-            #filename = secure_filename(file.filename)
-            filename = file.filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            date,event_str = main_test.main()
-            if date:
-                selectedDate = date.strftime('%Y-%m-%d')
-            else:
-                selectedDate = ""
-            print(date,event_str)
-            #return render_template('index.html', date=selectedDate, event=event_str)
-            return redirect('/gallery')
+        for file in files:
+            print(file)
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file: #and allowed_file(file.filename):
+                #filename = secure_filename(file.filename)
+                filename = file.filename
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                date,event_str = main_test.main()
+                if date:
+                    selectedDate = date.strftime('%Y-%m-%d')
+                else:
+                    selectedDate = ""
+                print(date,event_str)
+                #return render_template('index.html', date=selectedDate, event=event_str)
+        return redirect('/gallery')
 
     return
 @app.route('/gallery', methods=['POST'])

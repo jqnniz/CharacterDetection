@@ -23,6 +23,9 @@ Entfernung: {{Entfernung}} km
     {% for path in paths %}
     <li class="card">
       <img src='cdn/{{ path }}' onclick="clicked_img(this)" alt="Event Image">
+      <video width="100%" src="/static/Snapchat-1017642029.mp4" type="video/mp4" controls>
+        Your browser does not support the video tag.
+      </video> 
     </li>
     {% endfor %}
   </ul>
@@ -31,7 +34,7 @@ Entfernung: {{Entfernung}} km
   <label for="fileInput2" class="camera-icon">
     <i class="fa fa-camera"></i>
 </label>
-  <input type="file" name="file" accept="image/*" id="fileInput2" onchange="submitFileUpload()">
+  <input type="file" name="file" accept="image/*" id="fileInput2" onchange="submitFileUpload()" multiple>
   <!--<input type="submit" value="Upload" id="submitButton2">-->
 </form>
 </body>
