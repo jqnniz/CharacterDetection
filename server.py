@@ -33,7 +33,7 @@ def index():
     events = getAllEventsFromJSON()
     events = sortEventsDateDescending(events)
     events = addTitleImagePathToEvents(events)
-    maxCharacterCountEventTitle = 18
+    maxCharacterCountEventTitle = 16
     events = shortAllEventNamesToGivenLength(events,maxCharacterCountEventTitle)
     return render_template('index.html', events=events)
 
@@ -182,9 +182,32 @@ def select_date(message):
     selectedDate = message["date"]
     print(selectedDate)
 
-def initDateSelection():
 
-    allDates = []
+@socketio.on('selectTitleImage')
+def select_title_image(image):
+    global selectedDate
+    element = image["data"]
+    print("selectTitleImage")
+    print(element)
+    encodedpath = element.split("/cdn/")[-1]
+    print(encodedpath)
+
+    decodedFullPath = decode(encodedpath)
+    print(decodedFullPath)
+
+    filename = decodedFullPath.split("\\")[-1]
+    if filename == decodedFullPath:
+        filename = decodedFullPath.split("/")[-1]
+
+    print(filename)
+
+    event_path = os.path.join(app.config['ROOT_DIR'],selectedDate)
+    writeTitleImagePathToSingleTXTFile(event_path,filename)
+
+
+def initDateSelection():
+    print("client connected. Init Date Selection")
+    allDates = []   
     event_path = app.config['ROOT_DIR']
     for root,dirs,files in os.walk(event_path):
         allDates.append(dirs)
@@ -275,4 +298,5 @@ def shortAllEventNamesToGivenLength(events,maxlength):
     return events
 
 if __name__ == '__main__':
-    socketio.run(app,host="0.0.0.0",allow_unsafe_werkzeug=True,debug=True)
+    #socketio.run(app,host="0.0.0.0",allow_unsafe_werkzeug=True,debug=True)
+    app.run("0.0.0.0",debug=True)

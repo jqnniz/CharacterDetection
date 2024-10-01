@@ -14,3 +14,21 @@ function redirectToAdEvent(){
 function submitFileUpload(){
   document.getElementById('uploadForm2').submit();
 }
+function redirectToAddEvent(){
+  window.location.href = window.location.href + "newevent";
+}
+function submitEvent(){
+  if(document.getElementById('date').value == ""){
+    console.log("datum fehlt")
+  }else{
+    document.getElementById('newevent').submit();
+  }
+}
+
+function clicked_img(element) {
+  console.log(element);
+  var socket = io();
+  socket.emit('selectTitleImage',{data: element.src})
+
+  element.style = "border: 5px solid #5A5;"
+}

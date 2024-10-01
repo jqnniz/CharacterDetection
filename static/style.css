@@ -42,13 +42,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
 .eventplace{
   font-size: small;
   text-align: center;
   font-family:AriaL;
   color: whitesmoke;
-
+  visibility: hidden;
   background-color: #424C55;
 }
 .eventdate{
@@ -58,7 +59,7 @@
 }
 .eventname{
   color: whitesmoke;
-  font-size: x-large;
+  font-size: large;
   text-align: center;
   font-family:Arial;
 }
@@ -233,13 +234,9 @@ label{
 
 /* Responsive Design */
 @media (max-width: 600px) {
-  .cx img {
-      height: 150px;
-      width: 150px;
-  }
 
   h1 {
-      font-size: 20px;
+      font-size: 16px;
   }
 
   select, input[type="file"], input[type="submit"], input[type="text"],input[type="date"],input[type="number"] {
@@ -251,5 +248,9 @@ label{
       font-size: 24px;
       width: 100%;
   
+  }
+  .item {
+    width: 44%;
+    height: 18em;
   }
 }
