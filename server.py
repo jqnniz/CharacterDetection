@@ -36,9 +36,9 @@ def index():
     maxCharacterCountEventTitle = 16
     events = shortAllEventNamesToGivenLength(events,maxCharacterCountEventTitle)
 
-    statistic = getEventsMetaInformation(events)
+    statistic,locations,artists = getEventsMetaInformation(events)
 
-    return render_template('index.html', events=events, statistic=statistic)
+    return render_template('index.html', events=events, statistic=statistic,locations=locations,artists=artists)
 
 @app.route('/', methods=['POST'])
 def upload_file():
@@ -129,7 +129,8 @@ def newevent():
                      'location': request.args.get("event-location"),
                      'stadium': request.args.get("event-stadium"),
                      'artist': request.args.get("event-artist"),
-                     'tourname': request.args.get("event-tourname")
+                     'tourname': request.args.get("event-tourname"),
+                     'entfernung': getEntfernungFromCities("Bitterfeld",request.args.get("event-location"))
         }
         events = main_test.read_json('events.json', events='events')
 
@@ -173,8 +174,11 @@ def home():
             #except:
             #    delta = ""
             #    pass
+            target = "Bitterfeld"
+            destination = event[2]
+            entfernung = getEntfernungFromCities(target,destination)
 
-            return render_template('gallery.html', paths=image_paths,video_paths=video_paths, date=event[0],price=event[1],ort=event[2],stadium=event[3],artist=event[4],tour=event[5],days_offset=delta)
+            return render_template('gallery.html', paths=image_paths,video_paths=video_paths, date=event[0],price=event[1],ort=event[2],stadium=event[3],artist=event[4],tour=event[5],days_offset=delta,Entfernung=entfernung)
 
 
 @app.route('/cdn/<path:filepath>')
@@ -240,53 +244,97 @@ def getEventFromJSONWhereDate(date):
             return [event_date_str,event_cost,event_place,event_stadium,artist,tour]
     return None
 
+def getEntfernungFromCities(target,destination):
+    try:
+        from geopy.distance import geodesic as GD
+        from geopy.geocoders import Nominatim
+
+
+        city1 = target
+        city2 = destination
+
+        geolocator = Nominatim(user_agent="MyApp")
+
+        location_city1 = geolocator.geocode(city1)
+        location_city2 = geolocator.geocode(city2)
+
+        lat_long_city1 = (location_city1.latitude ,location_city1.longitude)
+        lat_long_city2 = (location_city2.latitude ,location_city2.longitude)
+
+        distance = GD(lat_long_city1 , lat_long_city2).km
+        entfernung = round(distance,2)
+        print(f"The distance between {city1} and {city2} is { distance}")
+    except:
+        entfernung = ''
+
+    return entfernung
+
 def getEventsMetaInformation(events):
     locations = []
     preis_total = 0.0
-    list = []  
+    statistic = []  
     #[
     #{"name": "Sandrine",  "score": 100},
     #{"name": "Gergeley", "score": 87},
     #{"name": "Frieda", "score": 92},
     #]
-    locations_verteilung = {'ort': '0'}
-    try:
-        for event in events:
-            event_place = event.get('stadium', '')
-            if event_place not in locations:
-                locations.append(event_place)
+    locations_verteilung = {}
+    artist_verteilung = {}
+    for event in events:
+        event_place = event.get('stadium', '')
+        if event_place not in locations:
+            locations.append(event_place)
 
-            if event_place in locations_verteilung:
-                locations_verteilung[event_place] = locations_verteilung[event_place] + 1
-            else:
-                locations_verteilung[event_place] = 1
-            event_price = event.get('price', 0)
-            preis_total = preis_total + float(event_price)
-        name = 'Konzerte'
-        value = len(events)
-        list.append({'name': name,'value':value})
-        name = 'Locations'
-        value = len(locations)
-        list.append({'name': name,'value':value})
-        name = 'Gesamtpreis'
-        value = str(round(preis_total,2)) + " €"
-        list.append({'name': name,'value':value})
-        name = 'Entfernung'
-        value = "- km"
-        list.append({'name': name,'value':value}) 
+        if event_place in locations_verteilung:
+            locations_verteilung[event_place] = locations_verteilung[event_place] + 1
+        else:
+            locations_verteilung[event_place] = 1
+
+        event_artist = event.get('artist', '')
+        if event_artist in artist_verteilung:
+            artist_verteilung[event_artist] = artist_verteilung[event_artist] + 1
+        else:
+            artist_verteilung[event_artist] = 1
+        event_price = event.get('price', 0)
+        preis_total = preis_total + float(event_price)
+    name = 'Konzerte'
+    value = len(events)
+    statistic.append({'name': name,'value':value})
+    name = 'Locations'
+    value = len(locations)
+    statistic.append({'name': name,'value':value})
+    name = 'Gesamtpreis'
+    value = str(round(preis_total,2)) + " €"
+    statistic.append({'name': name,'value':value})
+    name = 'Durchschnittspreis'
+    value = str(round(preis_total/len(events),2)) + " €"
+    statistic.append({'name': name,'value':value})
+    name = 'Entfernung'
+    value = "- km"
+    statistic.append({'name': name,'value':value}) 
 
 
-        #locations_verteilung = dict(sorted(locations_verteilung.items(), key=lambda item: item[1]))
-        print(locations_verteilung)
-        #data['preis_total'] = str(round(preis_total,2)) + " €"
-        #data['entfernung_total'] = "- km"
-        #data['konzerte_total'] = len(events)
-        #data['locations_total'] = len(locations)
-    except:
-        print("error")
-    print(list)
-    return list
+    locations_verteilung = dict(sorted(locations_verteilung.items(), key=lambda item: item[1],reverse=True))
+    locations_verteilung = removeKeysFromDictIfTotalCountGreaterThan(locations_verteilung,12)
+    print(locations_verteilung)
+    artist_verteilung = dict(sorted(artist_verteilung.items(), key=lambda item: item[1],reverse=True))
+    artist_verteilung = removeKeysFromDictIfTotalCountGreaterThan(artist_verteilung,12)
+    print(artist_verteilung)
+    #data['preis_total'] = str(round(preis_total,2)) + " €"
+    #data['entfernung_total'] = "- km"
+    #data['konzerte_total'] = len(events)
+    #data['locations_total'] = len(locations)
+    print(statistic)
+    return statistic,locations_verteilung.items(),artist_verteilung.items()
 
+
+def removeKeysFromDictIfTotalCountGreaterThan(dict,maxcount):
+    counter = 0
+    for k in list(dict.keys()):
+        if counter >= maxcount:
+            dict.pop(k, None)   
+        counter = counter + 1
+    return dict
 
 def sortEventsDateDescending(events):
     return sorted(events, key=lambda x: datetime.datetime.strptime(x['date'], '%Y-%m-%d'), reverse=True)

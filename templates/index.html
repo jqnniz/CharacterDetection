@@ -42,6 +42,30 @@
                         {% endfor %}
                 </div>
                 </div>
+                <div class="item">
+                    <div class="eventdescription" style="height: 100%; overflow: hidden;">
+                        <div class="eventname"  >
+                            Locations
+                        </div>
+                        {% for loc in locations %}
+                        <div class="eventdate">
+                            {{loc[0]}}: {{loc[1]}}
+                        </div>
+                        {% endfor %}
+                </div>
+                </div>
+                <div class="item">
+                    <div class="eventdescription" style="height: 100%; overflow: hidden;">
+                        <div class="eventname"  >
+                            Künstler
+                        </div>
+                        {% for artist in artists %}
+                        <div class="eventdate">
+                            {{artist[0]}}: {{artist[1]}}
+                        </div>
+                        {% endfor %}
+                </div>
+                </div>
                 
                 <div class="item" onclick="redirectToAddEvent()">
                     <div class="eventimgcontainer">
