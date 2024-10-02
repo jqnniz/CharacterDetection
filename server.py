@@ -91,7 +91,7 @@ def upload_file_toGallery():
                 os.mkdir(event_path) 
 
             file.save(os.path.join(event_path,filename))
-            image_paths=getPathsFromDir(event_path)
+            image_paths,video_paths=getPathsFromDir(event_path)
         return render_template('gallery.html', paths=image_paths, date=selectedDate)
 
     return
@@ -104,12 +104,16 @@ def create_new_event():
     return
 def getPathsFromDir(dir):
     image_paths = []
+    video_paths = []
     for root,dirs,files in os.walk(dir):
         for file in files:
             if any(file.endswith(ext) for ext in app.config['IMAGE_EXTS']):
-                image_paths.append(encode(os.path.join(root,file)))
+                    if file.endswith(".mp4"):
+                        video_paths.append(encode(os.path.join(root,file)))
+                    else:
+                        image_paths.append(encode(os.path.join(root,file)))
 
-    return image_paths
+    return image_paths,video_paths
 
 @app.route('/newevent')
 def newevent():
@@ -135,7 +139,7 @@ def newevent():
         if not os.path.exists(event_path):
             os.mkdir(event_path) 
 
-        image_paths=getPathsFromDir(event_path)
+        image_paths,_=getPathsFromDir(event_path)
         return redirect(url_for('.home', paths=image_paths, date=selectedDate))
 
 
@@ -152,7 +156,7 @@ def home():
         return redirect("/")
     else:
         event_path = os.path.join(root_dir,selectedDate)
-        image_paths=getPathsFromDir(event_path)
+        image_paths,video_paths=getPathsFromDir(event_path)
 
 
         event = getEventFromJSONWhereDate(selectedDate)
@@ -167,7 +171,7 @@ def home():
             #    delta = ""
             #    pass
 
-            return render_template('gallery.html', paths=image_paths, date=event[0],price=event[1],ort=event[2],stadium=event[3],artist=event[4],tour=event[5],days_offset=delta)
+            return render_template('gallery.html', paths=image_paths,video_paths=video_paths, date=event[0],price=event[1],ort=event[2],stadium=event[3],artist=event[4],tour=event[5],days_offset=delta)
 
 
 @app.route('/cdn/<path:filepath>')
@@ -268,7 +272,7 @@ def selectSinglePathFromDir(date):
         path = encode(os.path.join(event_path,path))
         return path
     
-    paths = getPathsFromDir(event_path)
+    paths,_ = getPathsFromDir(event_path)
     if len(paths) == 0:
         return ""
     else:

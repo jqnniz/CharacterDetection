@@ -21,13 +21,16 @@ Entfernung: {{Entfernung}} km
 <section class="gallery">
   <ul class="images">
     {% for path in paths %}
-    <li class="card">
-      <img src='cdn/{{ path }}' onclick="clicked_img(this)" alt="Event Image">
-      <video width="100%" src="/static/Snapchat-1017642029.mp4" type="video/mp4" controls>
-        Your browser does not support the video tag.
-      </video> 
-    </li>
+      <li class="card">
+        <img src='cdn/{{ path }}' onclick="clicked_img(this)" alt="Event Image">
+
+      </li>
     {% endfor %}
+    {% for path in video_paths %}
+    <li class="card">
+      <video width="100%" src='cdn/{{ path }}' type="video/mp4" controls></video>
+    </li>
+  {% endfor %}
   </ul>
 </section>
 <form method="post" enctype="multipart/form-data" id="uploadForm2">
