@@ -35,7 +35,10 @@ def index():
     events = addTitleImagePathToEvents(events)
     maxCharacterCountEventTitle = 16
     events = shortAllEventNamesToGivenLength(events,maxCharacterCountEventTitle)
-    return render_template('index.html', events=events)
+
+    statistic = getEventsMetaInformation(events)
+
+    return render_template('index.html', events=events, statistic=statistic)
 
 @app.route('/', methods=['POST'])
 def upload_file():
@@ -236,6 +239,53 @@ def getEventFromJSONWhereDate(date):
 
             return [event_date_str,event_cost,event_place,event_stadium,artist,tour]
     return None
+
+def getEventsMetaInformation(events):
+    locations = []
+    preis_total = 0.0
+    list = []  
+    #[
+    #{"name": "Sandrine",  "score": 100},
+    #{"name": "Gergeley", "score": 87},
+    #{"name": "Frieda", "score": 92},
+    #]
+    locations_verteilung = {'ort': '0'}
+    try:
+        for event in events:
+            event_place = event.get('stadium', '')
+            if event_place not in locations:
+                locations.append(event_place)
+
+            if event_place in locations_verteilung:
+                locations_verteilung[event_place] = locations_verteilung[event_place] + 1
+            else:
+                locations_verteilung[event_place] = 1
+            event_price = event.get('price', 0)
+            preis_total = preis_total + float(event_price)
+        name = 'Konzerte'
+        value = len(events)
+        list.append({'name': name,'value':value})
+        name = 'Locations'
+        value = len(locations)
+        list.append({'name': name,'value':value})
+        name = 'Gesamtpreis'
+        value = str(round(preis_total,2)) + " €"
+        list.append({'name': name,'value':value})
+        name = 'Entfernung'
+        value = "- km"
+        list.append({'name': name,'value':value}) 
+
+
+        #locations_verteilung = dict(sorted(locations_verteilung.items(), key=lambda item: item[1]))
+        print(locations_verteilung)
+        #data['preis_total'] = str(round(preis_total,2)) + " €"
+        #data['entfernung_total'] = "- km"
+        #data['konzerte_total'] = len(events)
+        #data['locations_total'] = len(locations)
+    except:
+        print("error")
+    print(list)
+    return list
 
 
 def sortEventsDateDescending(events):

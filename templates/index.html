@@ -29,6 +29,20 @@
                         </div>
                     </div>
                 {% endfor %}
+                
+                <div class="item">
+                    <div class="eventdescription" style="height: 100%;">
+                        <div class="eventname"  >
+                            Harte Fakten
+                        </div>
+                        {% for stat in statistic %}
+                        <div class="eventdate">
+                            {{stat.name}}: {{stat.value}}
+                        </div>
+                        {% endfor %}
+                </div>
+                </div>
+                
                 <div class="item" onclick="redirectToAddEvent()">
                     <div class="eventimgcontainer">
                     </div>
