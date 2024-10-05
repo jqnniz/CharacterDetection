@@ -269,6 +269,19 @@ def getEntfernungFromCities(target,destination):
 
     return entfernung
 
+def getEventPlaceWithoutSponsorName(event_place):
+
+    # read json 
+    arena_leipzig = ["quarterback immobilien arena","arena leipzig","arena","quarterback-immobilien-arena"]
+    if event_place.lower() in arena_leipzig:
+        return "Leipzig Arena"
+
+    arena_berlin = ["o2 world","mercedes-benz-arena","uber-arena","uber arena",]
+    if event_place.lower() in arena_berlin:
+        return "Mercedes-Benz-Arena"
+
+    return event_place
+
 def getEventsMetaInformation(events):
     locations = []
     preis_total = 0.0
@@ -282,8 +295,9 @@ def getEventsMetaInformation(events):
     artist_verteilung = {}
     for event in events:
         event_place = event.get('stadium', '')
-        if event_place not in locations:
-            locations.append(event_place)
+        event_place = getEventPlaceWithoutSponsorName(event_place)
+        if event_place.lower() not in locations:
+            locations.append(event_place.lower())
 
         if event_place in locations_verteilung:
             locations_verteilung[event_place] = locations_verteilung[event_place] + 1
