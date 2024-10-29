@@ -171,6 +171,9 @@ input[type="file"] {
   color: #388E3C;
 }
 
+.uploadFormClass{
+  visibility: hidden;
+}
 
 input[type="file"]:focus {
   border-color: #4CAF50;
