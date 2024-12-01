@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Image Gallery</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-dt2mUjU/6BjjNVc2h9uFZgNJQbtYk+N0XzrqLdy1J1hG8D6i8qYyPRk4rFScIKxjFqKJqfGPGkA+doBhQ8mc/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Other items in the gallery -->
+
+      <!-- KÃ¼nstler Section with Chart -->
+      <div class="item">
+        <div class="eventdescription" style="height: 100%; overflow: hidden;">
+          <div class="eventname">
+            KÃ¼nstler
+          </div>
+          <!-- Canvas Element for Chart.js -->
+          <canvas id="artistsChart" aria-label="Bar chart showing the number of albums per artist" role="img"></canvas>
+        </div>
+      </div>
+
+      <!-- Other items in the gallery -->
+
+      <!-- Special Items -->
+      <div class="item">
+        <div class="eventdescription" style="height: 100%;">
+          <div class="eventname">
+            Harte Fakten
+          </div>
+          {% for stat in statistic %}
+          <div class="eventdate">
+            {{stat.name}}: {{stat.value}}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="item">
+        <div class="eventdescription" style="height: 100%; overflow: hidden;">
+          <div class="eventname">
+            Locations
+          </div>
+          {% for loc in locations %}
+          <div class="eventdate">
+            {{loc[0]}}: {{loc[1]}}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="item">
+        <div class="eventdescription" style="height: 100%; overflow: hidden;">
+          <div class="eventname">
+            KÃ¼nstler
+          </div>
+          {% for artist in artists %}
+          <div class="eventdate">
+            {{artist[0]}}: {{artist[1]}}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="item" onclick="redirectToAddEvent()">
+        <div class="eventimgcontainer">
+        </div>
+        <div class="eventdescription" onclick="redirectToAddEvent()">
+          <div class="eventname">
+            Neues Event anlegen
+          </div>
+          <div class="eventdate">
+          </div>
+          <div class="eventplace">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Image Display -->
+    <div id="imageModal" class="modal">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImage">
+      <div id="caption"></div>
+    </div>
+
+    <script src="/static/script.js"></script>
+
+    <!-- Initialize Chart.js -->
+    <script>
+      // Prepare artist data from the server-side template
+       const artistsData = []
+    //     {% for artist in artists %}
+    //       {
+    //         name: {{ artist[0] }},
+    //         value: {{ artist[1] }}
+    //       },
+    //     {% endfor %}"
+    //   ];
+
+      // Extract labels and data values
+      const labels = artistsData.map(artist => artist.name);
+      const dataValues = artistsData.map(artist => artist.value);
+
+      // Get the canvas context
+      const ctx = document.getElementById('artistsChart').getContext('2d');
+
+      // Create the bar chart
+      const artistsChart = new Chart(ctx, {
+        type: 'bar', // Change to 'pie', 'doughnut', etc., if desired
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Number of Albums', // Customize based on your metric
+            data: dataValues,
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)',
+              // Add more colors if needed
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              // Add more colors if needed
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Number of Albums'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Artists'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false // Hide legend if not needed
+            },
+            title: {
+              display: true,
+              text: 'Artists Overview'
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
