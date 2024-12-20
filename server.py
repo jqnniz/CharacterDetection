@@ -9,6 +9,7 @@ import binascii
 import main_test
 
 selectedDate = ""
+artists = None
 
 UPLOAD_FOLDER = 'uploads'
 ROOT_DIR = 'events'
@@ -30,6 +31,7 @@ def decode(x):
 
 @app.route('/')
 def index():
+    global artists
     events = getAllEventsFromJSON()
     events = sortEventsDateDescending(events)
     events = addTitleImagePathToEvents(events)
@@ -38,7 +40,7 @@ def index():
 
     statistic,locations,artists = getEventsMetaInformation(events)
 
-    return render_template('index.html', events=events, statistic=statistic,locations=locations,artists=artists)
+    return render_template('index.html', events=events, statistic=statistic,locations=locations,artists=artists.items())
 
 @app.route('/', methods=['POST'])
 def upload_file():
@@ -188,7 +190,11 @@ def download_file(filepath):
 
 @socketio.on('init_connection')
 def init_connection(message):
+    global artists
     initDateSelection()
+    #json.dump(list(session_ls), fp)
+    a = list(artists)
+    emit('artist_values', {'artists': a}, broadcast=True)
 
 @socketio.on('select_date')
 def select_date(message):
@@ -339,7 +345,7 @@ def getEventsMetaInformation(events):
     #data['konzerte_total'] = len(events)
     #data['locations_total'] = len(locations)
     print(statistic)
-    return statistic,locations_verteilung.items(),artist_verteilung.items()
+    return statistic,locations_verteilung.items(),artist_verteilung
 
 
 def removeKeysFromDictIfTotalCountGreaterThan(dict,maxcount):

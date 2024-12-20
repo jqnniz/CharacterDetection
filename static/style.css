@@ -172,7 +172,7 @@ input[type="file"] {
 }
 
 .uploadFormClass{
-  visibility: hidden;
+  visibility: visible;
 }
 
 input[type="file"]:focus {
