@@ -3,6 +3,8 @@ console.log("INIT");
 socket.emit('init_connection', {data: 'connected!'});
 console.log("INIT Connnection sent.");
 
+const thisImg = document.getElementById("img01");
+thisImg.addEventListener("img01", (e) => {e.preventDefault()});
 
 function selectThisDate(date){
   socket.emit('select_date', {date: date});
@@ -26,9 +28,14 @@ function submitEvent(){
 }
 
 function clicked_img(element) {
+  //(e) => {e.preventDefault()}
   console.log(element);
   var socket = io();
   socket.emit('selectTitleImage',{data: element.src})
 
   element.style = "border: 5px solid #5A5;"
+  return false;
 }
+
+
+

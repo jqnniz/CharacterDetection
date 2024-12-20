@@ -9,7 +9,7 @@
 </head>
 <body>
 <a href="/">Zurück</a>
-<h1>{{artist}} in {{ ort }}</h1>
+<h1 >{{artist}} in {{ ort }}</h1>
 {{tour}}<br>
 {{price}}€ - {{stadium}}<br>
 {{date}} (vor {{days_offset}} Tagen)<br>
@@ -22,7 +22,8 @@ Entfernung: {{Entfernung}} km
   <ul class="images">
     {% for path in paths %}
       <li class="card">
-        <img src='cdn/{{ path }}' onclick="clicked_img(this)" alt="Event Image">
+        <!--onclick="clicked_img(this)"-->
+        <img src='cdn/{{ path }}' oncontextmenu="clicked_img(this)" id="img01" alt="Event Image">
 
       </li>
     {% endfor %}
