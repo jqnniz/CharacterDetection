@@ -22,6 +22,10 @@
   transform: scale(1.03);
 }
 
+.doubleitem{
+  width: 34em;
+}
+
 .eventimgcontainer{
   background-color: #424C55;
   width: 100%;
@@ -56,12 +60,15 @@
   font-size: medium;
   text-align: center;
   font-family:Arial;
+  cursor: pointer;
+
 }
 .eventname{
   color: whitesmoke;
   font-size: large;
   text-align: center;
   font-family:Arial;
+  cursor: pointer;
 }
 a {
   display: block;

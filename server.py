@@ -11,6 +11,8 @@ import main_test
 selectedDate = ""
 artists = None
 
+FUTURE_EVENTS = 'futureEvents'
+
 UPLOAD_FOLDER = 'uploads'
 ROOT_DIR = 'events'
 app = Flask(__name__)
@@ -34,13 +36,16 @@ def index():
     global artists
     events = getAllEventsFromJSON()
     events = sortEventsDateDescending(events)
+    events = filterFutureEvents(events)
     events = addTitleImagePathToEvents(events)
     maxCharacterCountEventTitle = 16
     events = shortAllEventNamesToGivenLength(events,maxCharacterCountEventTitle)
 
     statistic,locations,artists = getEventsMetaInformation(events)
+    futureEventToggle = readBooleanFromIniFile(FUTURE_EVENTS)
+    futureEventToggle = convertBooleanToGerman(futureEventToggle)
 
-    return render_template('index.html', events=events, statistic=statistic,locations=locations,artists=artists.items())
+    return render_template('index.html', events=events, statistic=statistic,locations=locations,artists=artists.items(),futureEventToggle=futureEventToggle)
 
 @app.route('/', methods=['POST'])
 def upload_file():
@@ -202,6 +207,15 @@ def select_date(message):
     selectedDate = message["date"]
     print(selectedDate)
 
+@socketio.on('toggleFutureEvents')
+def toggleFutureEvents():
+    print("toggleFutureEvents")
+    includeFutureEvents = readBooleanFromIniFile(FUTURE_EVENTS)
+    print("includeFutureEvents",includeFutureEvents)
+    invertedIncludeFutureEvents = not includeFutureEvents
+    print("invertedIncludeFutureEvents",invertedIncludeFutureEvents)
+    writeBooleanToIniFile(FUTURE_EVENTS,invertedIncludeFutureEvents)
+    return redirect('/')
 
 @socketio.on('selectTitleImage')
 def select_title_image(image):
@@ -359,6 +373,18 @@ def removeKeysFromDictIfTotalCountGreaterThan(dict,maxcount):
 def sortEventsDateDescending(events):
     return sorted(events, key=lambda x: datetime.datetime.strptime(x['date'], '%Y-%m-%d'), reverse=True)
 
+def filterFutureEvents(events):
+    includeFutureEvents = readBooleanFromIniFile(FUTURE_EVENTS)
+
+    if includeFutureEvents:
+        return events
+    
+    currentDate = datetime.datetime.today()
+    print(currentDate)
+    newEvents = [x for x in events if datetime.datetime.strptime(x["date"],'%Y-%m-%d') <= currentDate ]
+    #print(newEvents)
+    return newEvents
+
 
 def readTitleImagePathFromSingleTXTFile(eventpath):
     titleImagePath = ""
@@ -421,6 +447,58 @@ def shortAllEventNamesToGivenLength(events,maxlength):
         if isStringLongerThanGivenLength(name,maxlength):
             event['artist'] = shortStringToLengthAddPoints(name,maxlength)
     return events
+
+def getAllLinesFromFile(filePath):
+    try:
+        with open(filePath,'r') as f:
+            data = f.readlines()
+            f.close()
+
+        return data
+    except:
+        return ""
+    
+def writeDataToFile(data,filePath):
+    try:
+        with open(filePath,'w') as f:
+            for d in data:
+                f.write(d + "\n")
+            f.close()
+    except:
+        pass
+def writeBooleanToIniFile(keyname,value):
+    inifile = getIniFilePath()
+    data = getAllLinesFromFile(inifile)
+    for id,row in enumerate(data):
+        if keyname in row:
+            data[id] = keyname + "=" + str(value)
+    writeDataToFile(data,inifile)
+    
+
+def readBooleanFromIniFile(keyname):
+    inifile = getIniFilePath()
+    data = getAllLinesFromFile(inifile)
+    for row in data:
+        if keyname in row:
+            return isStringTrue(row.split(keyname)[1].replace("=",""))
+    return False
+
+def isStringTrue(string):
+    if "true" in string:
+        return True
+    if "True" in string:
+        return True
+    if "1" in string:
+        return True
+    return False
+
+def getIniFilePath():
+    return "server.ini"
+
+def convertBooleanToGerman(boolean):
+    if boolean:
+        return "Ja"
+    return "Nein"
 
 if __name__ == '__main__':
     #socketio.run(app,host="0.0.0.0",allow_unsafe_werkzeug=True,debug=True)

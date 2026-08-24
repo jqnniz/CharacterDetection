@@ -31,7 +31,12 @@
                     </div>
                 {% endfor %}
                 
-                <div class="item">
+
+
+
+            </div>
+            <div class="container" id="chartContainer">
+                <div class="item doubleitem">
                     <div class="eventdescription" style="height: 100%;">
                         <div class="eventname"  >
                             Harte Fakten
@@ -43,7 +48,7 @@
                         {% endfor %}
                 </div>
                 </div>
-                <div class="item">
+                <div class="item doubleitem">
                     <div class="eventdescription" style="height: 100%; overflow: hidden;">
                         <div class="eventname"  >
                             Locations
@@ -55,7 +60,7 @@
                         {% endfor %}
                 </div>
                 </div>
-                <div class="item">
+                <div class="item doubleitem">
                     <div class="eventdescription" style="height: 100%; overflow: hidden;">
                         <div class="eventname"  >
                             Künstler
@@ -70,22 +75,21 @@
                       <!-- Canvas Element for Chart.js -->
                       
 
-                <div class="item" onclick="redirectToAddEvent()">
-                    <div class="eventimgcontainer">
-                    </div>
-                    <div class="eventdescription" onclick="redirectToAddEvent()">
-                        <div class="eventname"  >
+                <div class="item doubleitem">
+                    <div class="eventdescription" >
+                        <div class="eventname" onclick="redirectToAddEvent()">
                             Neues Event anlegen
                         </div>
-                        <div class="eventdate">
-                        </div>
-                        <div class="eventplace">
+                    </div>
+                    <div class="eventdescription" >
+                        <div class="eventname" onclick="toggleFutureEvents()">
+                            Zukünftige Events anzeigen: {{futureEventToggle}}
                         </div>
                     </div>
-                </div>
 
+                </div>
+            
             </div>
-            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
 </body>
 </html>

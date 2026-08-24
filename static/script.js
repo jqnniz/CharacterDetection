@@ -27,6 +27,16 @@ function submitEvent(){
   }
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function toggleFutureEvents(){
+  socket.emit('toggleFutureEvents');
+  sleep(2500).then(() => { console.log('World!'); });
+  window.location.href = window.location.href;
+}
+
 function clicked_img(element) {
   //(e) => {e.preventDefault()}
   console.log(element);
