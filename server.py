@@ -128,33 +128,47 @@ def getPathsFromDir(dir):
 @app.route('/newevent')
 def newevent():
     global selectedDate
-    if request.args:
-        selectedDate = request.args.get("event-date")
+    mode = request.args.get("mode", "create")
+    date_value = request.args.get("event-date") or request.args.get("event_date")
 
-        newevent = {'date': request.args.get("event-date"),
-                     'price': request.args.get("event-price"),
-                     'location': request.args.get("event-location"),
-                     'stadium': request.args.get("event-stadium"),
-                     'artist': request.args.get("event-artist"),
-                     'tourname': request.args.get("event-tourname"),
-                     'entfernung': getEntfernungFromCities("Bitterfeld",request.args.get("event-location"))
+    if request.args and any(key in request.args for key in ["event-price", "event-location", "event-stadium", "event-artist", "event-tourname"]):
+        selectedDate = request.args.get("event-date") or request.args.get("event_date")
+
+        newevent = {'date': selectedDate,
+                     'price': request.args.get("event-price", "") or request.args.get("event_price", ""),
+                     'location': request.args.get("event-location", "") or request.args.get("event_location", ""),
+                     'stadium': request.args.get("event-stadium", "") or request.args.get("event_stadium", ""),
+                     'artist': request.args.get("event-artist", "") or request.args.get("event_artist", ""),
+                     'tourname': request.args.get("event-tourname", "") or request.args.get("event_tourname", ""),
+                     'entfernung': getEntfernungFromCities("Bitterfeld", request.args.get("event-location", "") or request.args.get("event_location", ""))
         }
-        events = main_test.read_json('events.json', events='events')
-
-        events.append(newevent)
+        events = getAllEventsFromJSON()
+        updated = False
+        for event in events:
+            if event.get('date') == selectedDate:
+                event.update(newevent)
+                updated = True
+                break
+        if not updated:
+            events.append(newevent)
 
         main_test.write_json('events.json', events=events)
 
-        event_path = os.path.join(app.config['ROOT_DIR'],selectedDate)
-
+        event_path = os.path.join(app.config['ROOT_DIR'], selectedDate)
         if not os.path.exists(event_path):
-            os.mkdir(event_path) 
+            os.makedirs(event_path, exist_ok=True)
 
         image_paths,_=getPathsFromDir(event_path)
-        return redirect(url_for('.home', paths=image_paths, date=selectedDate))
+        return redirect(url_for('.home', paths=image_paths, eventdate=selectedDate))
 
+    event = getEventFromJSONWhereDate(date_value) if date_value else None
+    event_dict = {}
+    if event is not None:
+        event_dict = event
+    elif date_value:
+        event_dict = {'date': date_value, 'price': '', 'location': '', 'stadium': '', 'artist': '', 'tourname': ''}
 
-    return render_template('newevent.html')
+    return render_template('newevent.html', event=event_dict, mode=mode)
 
 @app.route('/gallery')
 def home():
@@ -182,10 +196,10 @@ def home():
             #    delta = ""
             #    pass
             target = "Bitterfeld"
-            destination = event[2]
+            destination = event.get('location', '')
             entfernung = getEntfernungFromCities(target,destination)
 
-            return render_template('gallery.html', paths=image_paths,video_paths=video_paths, date=event[0],price=event[1],ort=event[2],stadium=event[3],artist=event[4],tour=event[5],days_offset=delta,Entfernung=entfernung)
+            return render_template('gallery.html', paths=image_paths,video_paths=video_paths, date=event.get('date',''),price=event.get('price',''),ort=event.get('location',''),stadium=event.get('stadium',''),artist=event.get('artist',''),tour=event.get('tourname',''),days_offset=delta,Entfernung=entfernung)
 
 
 @app.route('/cdn/<path:filepath>')
@@ -250,18 +264,19 @@ def initDateSelection():
 
 
 def getEventFromJSONWhereDate(date):
-    events = main_test.read_json('events.json', events='events')
+    events = getAllEventsFromJSON()
 
     for event in events:
         event_date_str = event.get('date','')
         if event_date_str == date:
-            event_cost = event.get('price', '')
-            event_place = event.get('location', '')
-            event_stadium = event.get('stadium', '')
-            artist = event.get('artist', '')
-            tour = event.get('tourname', '')
-
-            return [event_date_str,event_cost,event_place,event_stadium,artist,tour]
+            return {
+                'date': event_date_str,
+                'price': event.get('price', ''),
+                'location': event.get('location', ''),
+                'stadium': event.get('stadium', ''),
+                'artist': event.get('artist', ''),
+                'tourname': event.get('tourname', '')
+            }
     return None
 
 def getEntfernungFromCities(target,destination):
@@ -428,9 +443,54 @@ def addTitleImagePathToEvents(events):
         event['imgsrc'] = selectSinglePathFromDir(event['date'])
     return events
 
+def isEventFolderDateName(name):
+    if not isinstance(name, str):
+        return False
+    if len(name) != 10:
+        return False
+    try:
+        datetime.datetime.strptime(name, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+
 def getAllEventsFromJSON():
-    events = main_test.read_json('events.json', events='events')
-    dir(events)
+    if os.path.exists('events.json'):
+        events = main_test.read_json('events.json', events='events')
+    else:
+        events = []
+
+    event_dir = app.config['ROOT_DIR']
+    if os.path.isdir(event_dir):
+        existing_dates = {
+            event.get('date') for event in events
+            if isinstance(event, dict) and event.get('date')
+        }
+
+        new_events = []
+        for entry in sorted(os.listdir(event_dir)):
+            full_path = os.path.join(event_dir, entry)
+            if not os.path.isdir(full_path):
+                continue
+            if not isEventFolderDateName(entry):
+                continue
+            if entry in existing_dates:
+                continue
+
+            new_events.append({
+                'date': entry,
+                'price': '',
+                'location': '',
+                'stadium': '',
+                'artist': '',
+                'tourname': ''
+            })
+
+        if new_events:
+            events.extend(new_events)
+            main_test.write_json('events.json', events=events)
+
     return events
 
 def shortStringToLengthAddPoints(string,length):

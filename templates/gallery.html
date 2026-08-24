@@ -14,6 +14,9 @@
 {{price}}€ - {{stadium}}<br>
 {{date}} (vor {{days_offset}} Tagen)<br>
 Entfernung: {{Entfernung}} km
+<div style="margin: 12px 0;">
+  <a href="{{ url_for('newevent', mode='edit', event_date=date, **{'event-date': date}) }}">Event anpassen</a>
+</div>
 <div class="overlay">
   <img src="blah" id="top" hidden="true" alt="Large view">
   <span id="close" hidden="true" onclick="do_close()"><b><u>CLOSE(X)</u></b></span>

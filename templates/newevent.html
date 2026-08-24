@@ -9,20 +9,21 @@
 <body>
 <a href="/">Zurück</a>
 
-<form id="newevent">
+<form id="newevent" method="get">
+<input type="hidden" name="mode" value="{{ mode or 'create' }}" />
 <label for="date">Datum</label>
-<input type="date" id="date" name="event-date" min="2010-01-01" max="2999-12-31" />
+<input type="date" id="date" name="event-date" min="2010-01-01" max="2999-12-31" value="{{ event.get('date', '') if event else '' }}" />
 <label for="price">Preis</label>
-<input type="number" id="price" name="event-price"/>
+<input type="number" id="price" name="event-price" value="{{ event.get('price', '') if event else '' }}"/>
 <label for="location">Stadt/Ort</label>
-<input type="text" id="location" name="event-location"/>
+<input type="text" id="location" name="event-location" value="{{ event.get('location', '') if event else '' }}"/>
 <label for="stadium">Stadium/Arena/Halle/Veranstaltungsgelände</label>
-<input type="text" id="stadium" name="event-stadium"/>
+<input type="text" id="stadium" name="event-stadium" value="{{ event.get('stadium', '') if event else '' }}"/>
 <label for="artist">Künstler</label>
-<input type="text" id="artist" name="event-artist"/>
+<input type="text" id="artist" name="event-artist" value="{{ event.get('artist', '') if event else '' }}"/>
 <label for="tourname">Tourname</label>
-<input type="text" id="tourname" name="event-tourname"/>
-<input type="button" value="Event anlegen" onclick="submitEvent()"/>
+<input type="text" id="tourname" name="event-tourname" value="{{ event.get('tourname', '') if event else '' }}"/>
+<input type="button" value="{{ 'Event speichern' if mode == 'edit' else 'Event anlegen' }}" onclick="submitEvent()"/>
 
 </form>
 </body>
